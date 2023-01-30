@@ -8,7 +8,7 @@ const userHandler= require("./RouterHandler/userHandler")
 const checkLogin =require("./middlewares/checklogin")
 const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
 
-//
+
 
 
 const bcrypt =require("bcrypt")
@@ -19,14 +19,12 @@ const router=  express.Router()
 const userSchema=require("./schemas/userSchema")
 
 const User= new mongoose.model("User",userSchema)
-//
 
 app.use(cors())
 dotenv.config()
 app.use(express.json())
 app.use("/user",userHandler)
 
-// LmlBQuH0U089IjaF
 
 const uri = "mongodb+srv://assesment:LmlBQuH0U089IjaF@cluster0.6ib4udf.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -43,58 +41,9 @@ mongoose.connect(uri,{
 async function run(){
     
         try{ 
-            const userCollection=client.db("test").collection("users");
+
           const billCollection=client.db("assesment").collection("billcollections");
-          
-        
-app.post("/registration",async(req,res)=>{
-console.log(req.body)
- 
-
-  
-    // const hashedPassword =await bcrypt.hash(req.body.password,10);
-    console.log(req.body)
-    const newUser=new User({
-     
-        name:req.body.name,
-        email:req.body.email,
-        password:req.body.password
-      
-
-    });
    
-    const result =await newUser.save();
-    if(result){
-        res.status(500).json({
-            message:"Registration was successfull!"
-        }) 
-    }
-    
-
-
-   
-})
-
-app.post("/login",async(req,res)=>{
-  console.log(req.body)
-
-  let result= await userCollection.find(
-    {
-        $or:[
-            {name:{$regex:req.body.name} },
-            {email:{$regex:req.body.email}},
-          
-        ]
-    }
-  )
-  if(result){
-    res.send(req.body.name)
-  }
- 
-
-
-})
-        
         app.get("/allbills",async(req,res)=>{
            const page=parseInt(req.query.page )
            const size=parseInt(req.query.size)
@@ -186,7 +135,52 @@ app.post("/login",async(req,res)=>{
         })
      
      
-
+        app.post("/registration",async(req,res)=>{
+            console.log(req.body)
+             
+            
+              
+                console.log(req.body)
+                const newUser=new User({
+                 
+                    name:req.body.name,
+                    email:req.body.email,
+                    password:req.body.password
+                  
+            
+                });
+               
+                const result =await newUser.save();
+                if(result){
+                    res.status(500).json({
+                        message:"Registration was successfull!"
+                    }) 
+                }
+                
+            
+            
+               
+            })
+            
+            app.post("/login",async(req,res)=>{
+              console.log(req.body)
+            
+              let result= await userCollection.find(
+                {
+                    $or:[
+                        {name:{$regex:req.body.name} },
+                        {email:{$regex:req.body.email}},
+                      
+                    ]
+                }
+              )
+              if(result){
+                res.send(req.body.name)
+              }
+             
+            
+            
+            })
        
         
       }
@@ -221,4 +215,3 @@ app.listen(port,()=>{
 
 })
 
-// eYnpdgv0e8kBluGb
